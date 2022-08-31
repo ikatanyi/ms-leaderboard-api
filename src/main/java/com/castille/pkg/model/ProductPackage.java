@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Getter
 @Setter
-@Table(name = "resource_inventory")
+@Table(name = "product_package")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 public class ProductPackage implements Serializable {
     @Id
