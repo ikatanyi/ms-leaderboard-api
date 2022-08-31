@@ -1,4 +1,4 @@
-package com.castille.customer.api;
+package com.castille.customer.model.api;
 
 import com.castille.customer.dto.CustomerDto;
 import com.castille.customer.model.Customer;
