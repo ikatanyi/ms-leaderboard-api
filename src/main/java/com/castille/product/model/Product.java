@@ -1,7 +1,7 @@
 package com.castille.product.model;
 
-import com.castille.pkg.model.ProductPackage;
 import com.castille.product.data.ProductDto;
+import com.castille.pkg.model.ProductPackage;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.v3.oas.annotations.media.Schema;

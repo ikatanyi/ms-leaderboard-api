@@ -1,7 +1,5 @@
 package com.castille.pkg.service;
 
-import com.castille.customer.model.Customer;
-import com.castille.customer.model.specification.CustomerSpecification;
 import com.castille.exception.APIException;
 import com.castille.pkg.data.ProductPackageDto;
 import com.castille.pkg.model.ProductPackage;

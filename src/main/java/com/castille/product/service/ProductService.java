@@ -9,13 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  *
@@ -24,7 +22,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-//@CacheConfig(cacheNames = {"Product"})
+//@CacheConfig(cacheNames = {"Order"})
 public class ProductService {
 
     private final ProductRepository resourceRepository;
@@ -56,7 +54,7 @@ public class ProductService {
 
     public Product fetchProductOrThrow(Long id) {
         return this.resourceRepository.findById(id)
-                .orElseThrow(() -> APIException.notFound("Product id {0} not found.", id));
+                .orElseThrow(() -> APIException.notFound("Order id {0} not found.", id));
     }
 
     @Transactional(readOnly = true)

@@ -1,6 +1,11 @@
-package com.castille.order.dto.repository;
+package com.castille.order.repository;
 
+import com.castille.order.model.Order;
+import com.castille.product.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface OrderRepository extends JpaRepository<Book, Long> {
+@Repository
+public interface OrderRepository extends JpaRepository<Order, Long> {
+
 }

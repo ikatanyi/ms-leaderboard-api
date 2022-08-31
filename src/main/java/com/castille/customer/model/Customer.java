@@ -13,6 +13,7 @@ import javax.validation.constraints.NotEmpty;
 @Table(name = "customer")
 public class Customer {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotEmpty(message = "First name is required")
     private String firstName;
@@ -31,6 +32,7 @@ public class Customer {
         customerDto.setEmail(this.getEmail());
         customerDto.setGender(this.getGender());
         customerDto.setPhoneNumber(this.getPhoneNumber());
+        customerDto.setId(this.getId());
         return customerDto;
     }
 }

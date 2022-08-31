@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 
@@ -21,6 +22,9 @@ public class CustomerDto {
     private Gender gender;
     private String email;
     private String phoneNumber;
+    @Schema(hidden = true)
+    @Formula("concat(first_name, ' ', last_name)")
+    private String fullName;
 
     public Customer toCustomer(){
         Customer customer = new Customer();
