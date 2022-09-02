@@ -27,20 +27,20 @@ and Care systems to pick it up:-
     * RabbitMQ
     * Spring Security
 
-    
-## Important Links
-   For api documentation I am using swagger-Open Document Api which can be accessed from below Link
-      
-   Swagger : http://localhost:8080/swagger-ui/index.html
 
-   Some of the API links are described below:
+## Important Links
+For api documentation I am using swagger-Open Document Api which can be accessed from below Link
+
+Swagger : http://localhost:8080/swagger-ui/index.html
+
+Some of the API links are described below:
 
 
 
     some of the links are:
- ## Product
+## Product
 
-1.```POST /product**```-Create New Product	 
+1.```POST /product**```-Create New Product
 ```json        
     {
       "description": "Internet/Tv/Telephone/Mobile",
@@ -54,7 +54,7 @@ and Care systems to pick it up:-
 ```
 
 2.```GET /api/product/{id}``` -This is to fetch product details with unique id
-	    
+
 3.```GET /api/product?page=0&pageSize=20``` -This is to fetch the list of products**
 
 4.```PUT /api/product/{id}``` -This is to update products
@@ -156,12 +156,12 @@ and Care systems to pick it up:-
 8.```POST /api/order/{orderId}/marker-checker/{status}``` -This is to update an order status(PENDING/APPROVED/DISBURSED) depending on certain criteria by the agent
 
 
-   
+
 ## Storage
 **Task 1**
 1. For Storage I am using H2- database which is an in-memory database and saving to file for persistence
 
-H2 DB UI: http://localhost:8080/h2-console   
+H2 DB UI: http://localhost:8080/h2-console
 ```
 jdbcUrl:jdbc:h2:file:/data/orderdb
 username :sa
@@ -170,7 +170,7 @@ password :password
 **Task 2**
 1. MYSQLDB- for persistence
 
-Find sample in the project resource. 
+Find sample in the project resource.
 credentials are located in config-datastore on github, link shared on email
 
 ## Assumptions
@@ -178,12 +178,12 @@ credentials are located in config-datastore on github, link shared on email
 ```
 productDto.setProductPackages(this.packages.stream().map(ProductPackage::toProductPackageDto).collect(Collectors.toList()));
 ```
-2. **Creation of system users was beyond scope of the project hence configuring password and usernames to authenticate endpoints.**
+2. **Creation of system users was beyond scope of the project hence configuring password and usernames to authenticate endpoints. For an advanced system this can be its own microservice and we can implement using JWT and Oauth 2.0**
 
- 
+
 3. **Orders are made by customers but product and packages are set by agents hence order creation endpoint has security for user while the rest are administrator protected**
 
-    
+
 ## Build
 Download or clone the project from the link below:
 
@@ -200,12 +200,17 @@ https://github.com/ikatanyi/spring-config-server.git
 
 ## Run
     mvn spring-boot:run
- *Run packaged jar*
+*Run packaged jar*
 ```
-    java -jar dir-path\apocalypse\target\apocalypse-0.0.1-SNAPSHOT.jar
+    
 ```
 ## OTHER
-  1. *The project contains config-repo where settings are hosted check link below*
+1. *The project contains config-repo where settings are hosted check link below*
+```
+    
+```
+## Security
+1. *The project uses basic auth for endpoint authentication using spring security.
 
 https://github.com/ikatanyi/config-repo.git
 ## Licence
