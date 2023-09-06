@@ -1,0 +1,32 @@
+version: '1.0'
+services:
+  mysql:
+    image: "mysql:latest"
+    environment:
+      MYSQL_ROOT_PASSWORD: admin@_123
+      MYSQL_DATABASE: leaderboard
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin@_123
+    ports:
+      - "3306:3306"
+
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+      
+  spring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+      - mysql
+    env_file: .env
+    
+
+    
+    
+
