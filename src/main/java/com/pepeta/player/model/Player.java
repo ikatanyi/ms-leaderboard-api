@@ -39,6 +39,8 @@ public class Player {
         playerDto.setPhoneNumber(this.getPhoneNumber());
         playerDto.setId(this.getId());
         playerDto.setFullName(this.getFirstName()+" "+this.getLastName());
+        if(this.getScore()!=null)
+            playerDto.setScore(this.getScore().getScore());
         return playerDto;
     }
 
