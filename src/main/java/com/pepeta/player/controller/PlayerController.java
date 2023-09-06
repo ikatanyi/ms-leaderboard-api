@@ -1,9 +1,9 @@
-package com.castille.customer.model.api;
+package com.pepeta.player.controller;
 
-import com.castille.customer.dto.CustomerDto;
-import com.castille.customer.model.Customer;
-import com.castille.customer.model.enumeration.Gender;
-import com.castille.customer.service.CustomerService;
+import com.pepeta.player.dto.PlayerDto;
+import com.pepeta.player.model.Player;
+import com.pepeta.player.model.enumeration.Gender;
+import com.pepeta.player.service.PlayerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -13,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -22,46 +20,43 @@ import java.util.stream.Collectors;
  */
 @RestController
 @Slf4j
-@RequestMapping("/api/customer")
+@RequestMapping("/player")
 @RequiredArgsConstructor
-public class CustomerController {
+public class PlayerController {
 
-    private final CustomerService service;
+    private final PlayerService service;
 
 
     @PostMapping
-    public ResponseEntity<?> createCustomer(@Valid @RequestBody CustomerDto resourceDto) {
-        CustomerDto dto = service.createCustomer(resourceDto).toCustomerDto();
+    public ResponseEntity<?> createPlayer(@Valid @RequestBody PlayerDto playerDto) {
+        PlayerDto dto = service.createPlayer(playerDto).toPlayerDto();
         return ResponseEntity.ok(dto);
 
     }
-
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> fetchCustomerById(@PathVariable(value = "id") Long id) {
-        CustomerDto dto = service.fetchCustomerByIdOrThrow(id).toCustomerDto();
+    public ResponseEntity<?> fetchPlayerById(@PathVariable(value = "id") Long id) {
+        PlayerDto dto = service.fetchPlayerByIdOrThrow(id).toPlayerDto();
         return ResponseEntity.ok(dto);
     }
 
-
-
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCustomer(@PathVariable(value = "id") Long id, @Valid @RequestBody CustomerDto customerDto) {
+    public ResponseEntity<?> updatePlayer(@PathVariable(value = "id") Long id, @Valid @RequestBody PlayerDto playerDto) {
 
-        Customer resource = service.updateCustomer(id, customerDto);
-        return ResponseEntity.ok(resource.toCustomerDto());
+        Player resource = service.updatePlayer(id, playerDto);
+        return ResponseEntity.ok(resource.toPlayerDto());
 
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCustomer(@PathVariable(value = "id") Long id) {
-        service.deleteCustomer(id);
-        return ResponseEntity.ok("Customer deleted successfully");
+    public ResponseEntity<?> deletePlayer(@PathVariable(value = "id") Long id) {
+        service.deletePlayer(id);
+        return ResponseEntity.ok("Player deleted successfully");
 
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllCustomers(
+    public ResponseEntity<?> getAllPlayers(
             @RequestParam(value = "gender", required = false) final Gender gender,
             @RequestParam(value = "email", required = false) final String email,
             @RequestParam(value = "name", required = false) final String name,
@@ -71,7 +66,7 @@ public class CustomerController {
         page = page>=1 ? page-1 : page;
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<CustomerDto> pagedList = service.fetchCustomers(gender, email, name, phoneNumber, pageable).map(u -> u.toCustomerDto());
+        Page<PlayerDto> pagedList = service.fetchPlayers(gender, email, name, phoneNumber, pageable).map(u -> u.toPlayerDto());
         return ResponseEntity.ok(pagedList);
     }
 

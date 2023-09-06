@@ -1,7 +1,7 @@
-package com.castille.customer.dto;
+package com.pepeta.player.dto;
 
-import com.castille.customer.model.Customer;
-import com.castille.customer.model.enumeration.Gender;
+import com.pepeta.player.model.Player;
+import com.pepeta.player.model.enumeration.Gender;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,7 +13,7 @@ import javax.persistence.*;
 
 @Data
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class CustomerDto {
+public class PlayerDto {
     @Schema(hidden = true)
     private Long id;
     private String firstName;
@@ -25,14 +25,15 @@ public class CustomerDto {
     @Schema(hidden = true)
     @Formula("concat(first_name, ' ', last_name)")
     private String fullName;
+    private Integer score;
 
-    public Customer toCustomer(){
-        Customer customer = new Customer();
-        customer.setFirstName(this.getFirstName());
-        customer.setLastName(this.getLastName());
-        customer.setEmail(this.getEmail());
-        customer.setGender(this.getGender());
-        customer.setPhoneNumber(this.getPhoneNumber());
-        return customer;
+    public Player toPlayer(){
+        Player player = new Player();
+        player.setFirstName(this.getFirstName());
+        player.setLastName(this.getLastName());
+        player.setEmail(this.getEmail());
+        player.setGender(this.getGender());
+        player.setPhoneNumber(this.getPhoneNumber());
+        return player;
     }
 }

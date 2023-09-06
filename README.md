@@ -3,7 +3,7 @@
 ## Task 1 Description
 Develop an authenticated Order Taking API stack that is exposed to 3rd party endpoints (example an
 ERP system) selling products on behalf of Melita.
-An order specifies the customer details (including personal details, installation address, preferred
+An order specifies the player details (including personal details, installation address, preferred
 installation date + time slot details), the required products (e.g. Internet, TV, Telephony, Mobile) and
 the required package per product (e.g. Internet 250Mbps or 1Gbps, TV with 90 Channels or 140
 Channels, Telephony with Free On net Calls or Unlimited Calls, Mobile Prepaid or Mobile Postpaid). The Order Taking API must validate these details and accept the order. On accepting the
@@ -71,7 +71,7 @@ Some of the API links are described below:
 
 ## Customer
 
-1.```POST /customer**```-Registers a new customer
+1.```POST /player**```-Registers a new player
 ```json        
     {
       "first_name": "string",
@@ -83,11 +83,11 @@ Some of the API links are described below:
         
 ```
 
-2.```GET /api/customer/{id}``` -This is to a customer with unique id
+2.```GET /api/player/{id}``` -This is to a player with unique id
 
-3.```GET /api/customer?gender=FEMALE&email=%40&name=ken&phoneNumber=07234566&page=0&pageSize=20``` -This fetches list of registered customers , it has optional filters**
+3.```GET /api/player?gender=FEMALE&email=%40&name=ken&phoneNumber=07234566&page=0&pageSize=20``` -This fetches list of registered customers , it has optional filters**
 
-4.```PUT /api/customer/{id}``` -This is to update customer
+4.```PUT /api/player/{id}``` -This is to update player
 ```json
 {
   "first_name": "string",
@@ -97,7 +97,7 @@ Some of the API links are described below:
   "phone_number": "string"
 }
 ```
-7.```DELETE /api/customer/{id}``` -This is to delete a customer
+7.```DELETE /api/player/{id}``` -This is to delete a player
 
 ## Product-Package
 
@@ -126,7 +126,7 @@ Some of the API links are described below:
 
 ## Order
 
-1.```POST /customer**```-Registers a new order
+1.```POST /player**```-Registers a new order
 ```json        
     {
       "customer_id": 1,

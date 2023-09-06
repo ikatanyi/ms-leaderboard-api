@@ -1,4 +1,4 @@
-package com.castille.config;
+package com.pepeta.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

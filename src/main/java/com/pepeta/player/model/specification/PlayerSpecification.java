@@ -1,7 +1,7 @@
-package com.castille.customer.model.specification;
+package com.pepeta.player.model.specification;
 
-import com.castille.customer.model.Customer;
-import com.castille.customer.model.enumeration.Gender;
+import com.pepeta.player.model.Player;
+import com.pepeta.player.model.enumeration.Gender;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Predicate;
@@ -12,13 +12,13 @@ import java.util.ArrayList;
  *
  * @author Kelsas
  */
-public class CustomerSpecification {
+public class PlayerSpecification {
 
-    public CustomerSpecification() {
+    public PlayerSpecification() {
         super();
     }
 
-    public static Specification<Customer> createSpecification(Gender gender, String email, String phoneNumber, String name) {
+    public static Specification<Player> createSpecification(Gender gender, String email, String phoneNumber, String name) {
         return (root, query, cb) -> {
             final ArrayList<Predicate> predicates = new ArrayList<>();
 

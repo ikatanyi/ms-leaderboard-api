@@ -1,11 +1,11 @@
-package com.castille.customer.repository;
+package com.pepeta.player.repository;
 
-import com.castille.customer.model.Customer;
+import com.pepeta.player.model.Player;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.Optional;
 
-public interface CustomerRepository extends JpaRepository<Customer, Long>, JpaSpecificationExecutor<Customer> {
-    Optional<Customer>findByEmail(String email);
+public interface PlayerRepository extends JpaRepository<Player, Long>, JpaSpecificationExecutor<Player> {
+    Optional<Player>findByEmail(String email);
 }

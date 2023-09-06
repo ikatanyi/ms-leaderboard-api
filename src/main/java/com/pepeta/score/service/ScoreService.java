@@ -1,75 +1,134 @@
-package com.castille.pkg.service;
+package com.pepeta.score.service;
 
-import com.castille.exception.APIException;
-import com.castille.pkg.data.ProductPackageDto;
-import com.castille.pkg.model.ProductPackage;
-import com.castille.pkg.model.specification.ProductPackageSpecification;
-import com.castille.pkg.repository.ProductPackageRepository;
-import com.castille.product.model.Product;
-import com.castille.product.service.ProductService;
+import com.pepeta.exception.APIException;
+
+import com.pepeta.player.model.Player;
+import com.pepeta.player.service.PlayerService;
+import com.pepeta.score.data.ScoreDto;
+import com.pepeta.score.data.ScoreUpdateDto;
+import com.pepeta.score.model.Score;
+import com.pepeta.score.model.specification.ScoreSpecification;
+import com.pepeta.score.repository.ScoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- *
  * @author Kennedy Ikatanyi
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
-//@CacheConfig(cacheNames = {"ProductPackage"})
-public class ProductPackageService {
+//@CacheConfig(cacheNames = {"Score"})
+public class ScoreService {
 
-    private final ProductPackageRepository productPackageRepository;
-    private final ProductService productService;
+    private final ScoreRepository scoreRepository;
+    private final PlayerService playerService;
 
-//
+    //
     @Transactional
-    public ProductPackage createProductPackage(ProductPackageDto productPackageDto) {
-        Product product = productService.fetchProductOrThrow(productPackageDto.getProductId());
-        ProductPackage productPackage = productPackageDto.toProductPackage();
-        productPackage.setProduct(product);
-        return productPackageRepository.save(productPackage);
-    }
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public ProductPackage updateItem(Long id, ProductPackageDto productPackageData) {
-        ProductPackage productPackage = fetchProductPackageOrThrow(id);
-        productPackage.setDescription(productPackageData.getDescription());
-        return productPackageRepository.save(productPackage);
+    public Score createScore(ScoreDto scoreDto) {
+        Player player = playerService.fetchPlayerByIdOrThrow(scoreDto.getPlayerId());
+        Score score = scoreDto.toScore();
+        score.setPlayer(player);
+        return scoreRepository.save(score);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public Boolean deleteProductPackage(Long id) {
-        ProductPackage productPackage = fetchProductPackageOrThrow(id);
-        productPackageRepository.delete(productPackage);
+    public Score updateScore(Long id, ScoreDto scoreDto) {
+        Score score = fetchScore(id);
+        score.setScore(scoreDto.getScore());
+        return scoreRepository.save(score);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public Boolean deleteScore(Long id) {
+        Score score = fetchScore(id);
+        scoreRepository.delete(score);
         return true;
     }
 
-    public Page<ProductPackage> fetchProductPackages(String productName, String description, Pageable pageable) {
-        Specification<ProductPackage> spec = ProductPackageSpecification.createSpecification(productName, description);
-        Page<ProductPackage> products = productPackageRepository.findAll(spec, pageable);
+    public Page<Score> fetchScores(Long playerId, Long score, Pageable pageable) {
+        Specification<Score> spec = ScoreSpecification.createSpecification(playerId, score);
+        Page<Score> scores = scoreRepository.findAll(spec, pageable);
+        return scores;
+    }
+
+    public Page<Score> fetchTopPlayers(int players) {
+        Page<Score> products = scoreRepository.findAll(PageRequest.of(0, players, Sort.by(Sort.Direction.DESC, "score")));
         return products;
     }
 
-    public ProductPackage fetchProductPackageOrThrow(Long id) {
-        return this.productPackageRepository.findById(id)
-                .orElseThrow(() -> APIException.notFound("ProductPackage identified by id {0} not found.", id));
+    public Score updatePlayerScore(Long id, ScoreUpdateDto scoreDto) {
+        Score score = scoreRepository.findByPlayerId(id)
+                .orElseThrow(() -> APIException.notFound("Score identified by id {0} not found.", id));
+        score.setScore(scoreDto.getScore());
+        return scoreRepository.save(score);
+    }
+
+    public Score fetchScore(Long id) {
+        return this.scoreRepository.findById(id)
+                .orElseThrow(() -> APIException.notFound("Score identified by id {0} not found.", id));
     }
 
     @Transactional(readOnly = true)
     @Cacheable
-    public Collection<ProductPackage> findAll() {
-        return productPackageRepository.findAll();
+    public List<Score> findAll() {
+        return scoreRepository.findAll();
     }
 
+    public List<ScoreDto> standardRanking(List<Score> scores) {
+        System.out.println("\nStandard ranking");
+        List<ScoreDto> sortedList = scores.stream()
+                .sorted(Comparator.comparing(Score::getScore).reversed())
+                .map(Score::toScoreDto)
+                .collect(Collectors.toList());
 
+        int rank = 0;
+        for (int i = 0; i < sortedList.size(); i++) {
+            if (i == 0)
+                rank = 1;
+            else
+                rank = sortedList.get(i).getScore() == sortedList.get(i-1).getScore() ? sortedList.get(i - 1).getRank() : i + 1;
+            sortedList.get(i).setRank(rank);
+        }
+        return sortedList;
+    }
+
+    public ScoreDto standardRanking(Long id) {
+        System.out.println("\nStandard ranking");
+        List<Score> scores = findAll();
+        List<ScoreDto> sortedList = scores.stream()
+                .sorted(Comparator.comparing(Score::getScore).reversed())
+                .map(Score::toScoreDto)
+                .collect(Collectors.toList());
+        int rank = 1;
+        for (int i = 0; i < sortedList.size(); i++) {
+            if (i == 0)
+                rank = 1;
+            else
+                rank = sortedList.get(i).getScore() == sortedList.get(i - 1).getScore() ? sortedList.get(i - 1).getRank() : i + 1;
+            sortedList.get(i).setRank(rank);
+        }
+        return sortedList.stream().filter(x -> x.getId() == id).findFirst().orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    @Cacheable
+    public Score findByPlayerId(Long id) {
+        return scoreRepository.findByPlayerId(id)
+                .orElseThrow(() -> APIException.notFound("Player identified by id {0} not found.", id));
+    }
 }

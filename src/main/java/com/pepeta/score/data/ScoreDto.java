@@ -1,6 +1,6 @@
-package com.castille.pkg.data;
+package com.pepeta.score.data;
 
-import com.castille.pkg.model.ProductPackage;
+import com.pepeta.score.model.Score;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,20 +10,19 @@ import javax.validation.constraints.NotEmpty;
 
 @Data
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class ProductPackageDto {
+public class ScoreDto {
     @Schema(hidden = true)
     private Long id;
-    @NotEmpty(message = "Order Id is required")
-    private Long productId;
+    private Integer score;
+    @NotEmpty(message = "Player Id is required")
+    private Long playerId;
     @Schema(hidden = true)
-    private String productName;
-    @Schema(hidden = true)
-    private String product;
-    private String description;
+    private String playerName;
+    private Integer rank;
 
-    public ProductPackage toProductPackage(){
-        ProductPackage productPackage = new ProductPackage();
-        productPackage.setDescription(this.getDescription());
-        return productPackage;
+    public Score toScore(){
+        Score score = new Score();
+        score.setScore(this.getScore());
+        return score;
     }
 }

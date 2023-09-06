@@ -1,7 +1,7 @@
-package com.castille.pkg.model;
+package com.pepeta.score.model;
 
-import com.castille.pkg.data.ProductPackageDto;
-import com.castille.product.model.Product;
+import com.pepeta.player.model.Player;
+import com.pepeta.score.data.ScoreDto;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
@@ -13,24 +13,24 @@ import java.io.Serializable;
 @Entity
 @Getter
 @Setter
-@Table(name = "product_package")
+@Table(name = "score")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
-public class ProductPackage implements Serializable {
+public class Score implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-    private String description;
+    @OneToOne
+    @JoinColumn(name="player_id")
+    private Player player;
+    private Integer score;
 
-    public ProductPackageDto toProductPackageDto(){
-        ProductPackageDto productPackageDto = new ProductPackageDto();
-        productPackageDto.setId(this.getId());
-        productPackageDto.setProductId(this.getProduct().getId());
-        productPackageDto.setProductName(this.getProduct().getDescription());
-        productPackageDto.setDescription(this.getDescription());
-        return productPackageDto;
+    public ScoreDto toScoreDto(){
+        ScoreDto scoreDto = new ScoreDto();
+        scoreDto.setId(this.getId());
+        scoreDto.setScore(this.getScore());
+        scoreDto.setPlayerId(this.getPlayer().getId());
+        scoreDto.setPlayerName(this.getPlayer().getFirstName()+" "+this.getPlayer().getLastName());
+        return scoreDto;
     }
 }

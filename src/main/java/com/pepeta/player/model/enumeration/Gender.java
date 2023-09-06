@@ -1,4 +1,4 @@
-package com.castille.customer.model.enumeration;
+package com.pepeta.player.model.enumeration;
 
 public enum Gender {
     FEMALE,

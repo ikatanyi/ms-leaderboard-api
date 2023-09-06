@@ -1,11 +1,12 @@
-package com.castille.customer.service;
+package com.pepeta.player.service;
 
-import com.castille.customer.dto.CustomerDto;
-import com.castille.customer.model.Customer;
-import com.castille.customer.model.enumeration.Gender;
-import com.castille.customer.model.specification.CustomerSpecification;
-import com.castille.customer.repository.CustomerRepository;
-import com.castille.exception.APIException;
+import com.pepeta.player.dto.PlayerDto;
+import com.pepeta.player.model.Player;
+import com.pepeta.player.model.enumeration.Gender;
+import com.pepeta.player.model.specification.PlayerSpecification;
+import com.pepeta.player.repository.PlayerRepository;
+import com.pepeta.exception.APIException;
+import com.pepeta.score.model.Score;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,45 +19,48 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerService {
-    private final CustomerRepository customerRepository;
+public class PlayerService {
+    private final PlayerRepository playerRepository;
 
-    public List<Customer> findAll() {
-        return customerRepository.findAll();
+    public List<Player> findAll() {
+        return playerRepository.findAll();
     }
 
-    public Customer fetchCustomerByIdOrThrow(Long id) {
-        return customerRepository.findById(id).orElseThrow(() -> APIException.notFound("Customer identified by id {0} not found", id));
+    public Player fetchPlayerByIdOrThrow(Long id) {
+        return playerRepository.findById(id).orElseThrow(() -> APIException.notFound("Player identified by id {0} not found", id));
     }
 
-    public Optional<Customer> findByEmail(String email) {
-        return customerRepository.findByEmail(email);
+    public Optional<Player> findByEmail(String email) {
+        return playerRepository.findByEmail(email);
     }
 
-    public Customer createCustomer(CustomerDto customerDto) {
-        Customer customer = customerDto.toCustomer();
-        return customerRepository.save(customer);
+    public Player createPlayer(PlayerDto playerDto) {
+        Player player = playerDto.toPlayer();
+        Score score = new Score();
+        score.setScore(playerDto.getScore());
+        player.addScore(score);
+        return playerRepository.save(player);
     }
 
-    public void deleteCustomer(Long id) {
-        Customer customer = customerRepository.findById(id).orElseThrow(() -> APIException.notFound("Customer identified by id {0} not found", id));
-        customerRepository.delete(customer);
+    public void deletePlayer(Long id) {
+        Player player = playerRepository.findById(id).orElseThrow(() -> APIException.notFound("Player identified by id {0} not found", id));
+        playerRepository.delete(player);
     }
 
-    public Customer updateCustomer(Long id, CustomerDto customerDto) {
+    public Player updatePlayer(Long id, PlayerDto playerDto) {
         LocalDate now = LocalDate.now();
-        Customer customer = customerRepository.findById(id).orElseThrow(() -> APIException.notFound("Customer identified by id {0} not found", id));
-        customer.setFirstName(customerDto.getFirstName());
-        customer.setLastName(customerDto.getLastName());
-        customer.setGender(customerDto.getGender());
-        customer.setEmail(customerDto.getEmail());
-        customer.setPhoneNumber(customerDto.getPhoneNumber());
-        return customerRepository.save(customer);
+        Player player = playerRepository.findById(id).orElseThrow(() -> APIException.notFound("Player identified by id {0} not found", id));
+        player.setFirstName(playerDto.getFirstName());
+        player.setLastName(playerDto.getLastName());
+        player.setGender(playerDto.getGender());
+        player.setEmail(playerDto.getEmail());
+        player.setPhoneNumber(playerDto.getPhoneNumber());
+        return playerRepository.save(player);
     }
 
-    public Page<Customer> fetchCustomers(Gender gender, String email, String name, String phoneNumber, Pageable pageable) {
-        Specification<Customer> spec = CustomerSpecification.createSpecification(gender, email, name, phoneNumber);
-        Page<Customer> items = customerRepository.findAll(spec, pageable);
+    public Page<Player> fetchPlayers(Gender gender, String email, String name, String phoneNumber, Pageable pageable) {
+        Specification<Player> spec = PlayerSpecification.createSpecification(gender, email, name, phoneNumber);
+        Page<Player> items = playerRepository.findAll(spec, pageable);
         return items;
     }
 

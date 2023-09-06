@@ -1,16 +1,16 @@
-package com.castille.pkg.repository;
+package com.pepeta.score.repository;
 
-import com.castille.pkg.model.ProductPackage;
-import com.castille.product.model.Product;
+import com.pepeta.player.model.Player;
+import com.pepeta.score.model.Score;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface ProductPackageRepository extends JpaRepository<ProductPackage, Long>, JpaSpecificationExecutor<ProductPackage> {
-
-    List<ProductPackage> findByProduct(Product product);
+public interface ScoreRepository extends JpaRepository<Score, Long>, JpaSpecificationExecutor<Score> {
+    Optional<Score> findByPlayerId(Long id);
 }
 

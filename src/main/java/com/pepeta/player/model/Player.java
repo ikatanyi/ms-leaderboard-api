@@ -1,7 +1,8 @@
-package com.castille.customer.model;
+package com.pepeta.player.model;
 
-import com.castille.customer.dto.CustomerDto;
-import com.castille.customer.model.enumeration.Gender;
+import com.pepeta.player.dto.PlayerDto;
+import com.pepeta.player.model.enumeration.Gender;
+import com.pepeta.score.model.Score;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,10 +11,10 @@ import javax.validation.constraints.NotEmpty;
 
 @Data
 @Entity
-@Table(name = "customer")
-public class Customer {
+@Table(name = "player")
+public class Player {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotEmpty(message = "First name is required")
     private String firstName;
@@ -25,14 +26,24 @@ public class Customer {
     private Gender gender;
     private String phoneNumber;
 
-    public CustomerDto toCustomerDto(){
-        CustomerDto customerDto = new CustomerDto();
-        customerDto.setFirstName(this.getFirstName());
-        customerDto.setLastName(this.getLastName());
-        customerDto.setEmail(this.getEmail());
-        customerDto.setGender(this.getGender());
-        customerDto.setPhoneNumber(this.getPhoneNumber());
-        customerDto.setId(this.getId());
-        return customerDto;
+    @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private Score score;
+
+    public PlayerDto toPlayerDto(){
+        PlayerDto playerDto = new PlayerDto();
+        playerDto.setFirstName(this.getFirstName());
+        playerDto.setLastName(this.getLastName());
+        playerDto.setEmail(this.getEmail());
+        playerDto.setGender(this.getGender());
+        playerDto.setPhoneNumber(this.getPhoneNumber());
+        playerDto.setId(this.getId());
+        playerDto.setFullName(this.getFirstName()+" "+this.getLastName());
+        return playerDto;
+    }
+
+    public void addScore(Score score){
+      score.setPlayer(this);
+      this.setScore(score);
     }
 }

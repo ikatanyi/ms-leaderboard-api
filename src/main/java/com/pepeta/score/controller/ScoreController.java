@@ -1,9 +1,9 @@
-package com.pepeta.player.controller;
+package com.pepeta.score.controller;
 
-import com.pepeta.player.dto.PlayerDto;
-import com.pepeta.player.model.Player;
-import com.pepeta.player.model.enumeration.Gender;
-import com.pepeta.player.service.PlayerService;
+import com.pepeta.score.data.ScoreDto;
+import com.pepeta.score.data.ScoreUpdateDto;
+import com.pepeta.score.model.Score;
+import com.pepeta.score.service.ScoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,57 +20,55 @@ import javax.validation.Valid;
  */
 @RestController
 @Slf4j
-@RequestMapping("/api/customer")
+@RequestMapping("/score")
 @RequiredArgsConstructor
-public class PlayerController {
+public class ScoreController {
 
-    private final PlayerService service;
-
-
-    @PostMapping
-    public ResponseEntity<?> createPlayer(@Valid @RequestBody PlayerDto resourceDto) {
-        PlayerDto dto = service.createPlayer(resourceDto).toPlayerDto();
-        return ResponseEntity.ok(dto);
-
-    }
-
+    private final ScoreService service;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> fetchPlayerById(@PathVariable(value = "id") Long id) {
-        PlayerDto dto = service.fetchPlayerByIdOrThrow(id).toPlayerDto();
+    public ResponseEntity<?> fetchScoreById(@PathVariable(value = "id") Long id) {
+        ScoreDto dto = service.fetchScore(id).toScoreDto();
         return ResponseEntity.ok(dto);
     }
 
-
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updatePlayer(@PathVariable(value = "id") Long id, @Valid @RequestBody PlayerDto playerDto) {
-
-        Player resource = service.updatePlayer(id, playerDto);
-        return ResponseEntity.ok(resource.toPlayerDto());
-
+    @PutMapping("player/{id}/score")
+    public ResponseEntity<?> updateScore(@PathVariable(value = "id") Long id, @Valid @RequestBody ScoreUpdateDto scoreDto) {
+        Score score = service.updatePlayerScore(id, scoreDto);
+        return ResponseEntity.ok(service.standardRanking(score.getId()));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePlayer(@PathVariable(value = "id") Long id) {
-        service.deletePlayer(id);
-        return ResponseEntity.ok("Player deleted successfully");
+    public ResponseEntity<?> deleteScore(@PathVariable(value = "id") Long id) {
+        service.deleteScore(id);
+        return ResponseEntity.ok("Score deleted successfully");
 
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllPlayers(
-            @RequestParam(value = "gender", required = false) final Gender gender,
-            @RequestParam(value = "email", required = false) final String email,
-            @RequestParam(value = "name", required = false) final String name,
-            @RequestParam(value = "phoneNumber", required = false) final String phoneNumber,
+    public ResponseEntity<?> getAllScores(
+            @RequestParam(value = "playerId", required = false) final Long playerId,
+            @RequestParam(value = "score", required = false) final Long score,
             @RequestParam(value = "page", defaultValue = "0",required = false) Integer page,
             @RequestParam(value = "pageSize", defaultValue = "20",required = false) Integer size) {
         page = page>=1 ? page-1 : page;
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<PlayerDto> pagedList = service.fetchPlayers(gender, email, name, phoneNumber, pageable).map(u -> u.toPlayerDto());
-        return ResponseEntity.ok(pagedList);
+        Page<Score> pagedList = service.fetchScores(playerId, score, pageable);
+        return ResponseEntity.ok(service.standardRanking(pagedList.getContent()));
+    }
+
+    @GetMapping(" /leaderboard/top/{players}")
+    public ResponseEntity<?> getTopPlayers(
+            @RequestParam(value = "players", required = false) final Integer players) {
+        Page<Score> pagedList = service.fetchTopPlayers(players);
+        return ResponseEntity.ok(service.standardRanking(pagedList.getContent()));
+    }
+
+    @GetMapping("/players/{id}/rank")
+    public ResponseEntity<?> fetchRankByPlayerId(@PathVariable(value = "id") Long id) {
+        Score score = service.findByPlayerId(id);
+        return ResponseEntity.ok(service.standardRanking(score.getId()));
     }
 
 }

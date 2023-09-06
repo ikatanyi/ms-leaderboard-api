@@ -1,4 +1,4 @@
-package com.castille.exception;
+package com.pepeta.exception;
 
 import org.springframework.http.HttpStatus;
 

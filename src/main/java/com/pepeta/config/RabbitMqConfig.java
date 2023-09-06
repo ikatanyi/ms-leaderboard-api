@@ -1,4 +1,4 @@
-package com.castille.config;
+package com.pepeta.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;

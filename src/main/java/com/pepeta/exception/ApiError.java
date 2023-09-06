@@ -1,4 +1,4 @@
-package com.castille.exception;
+package com.pepeta.exception;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;

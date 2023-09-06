@@ -1,19 +1,15 @@
-package com.castille;
+package com.pepeta;
 
 
-import com.castille.order.repository.OrderRepository;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Profile;
 
 @SpringBootApplication
-public class OrderApiApplication {
+public class LeaderBoardApiApplication {
 
     // start everything
     public static void main(String[] args) {
-        SpringApplication.run(OrderApiApplication.class, args);
+        SpringApplication.run(LeaderBoardApiApplication.class, args);
     }
 
 //    @Profile("demo")

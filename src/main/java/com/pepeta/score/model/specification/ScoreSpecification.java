@@ -1,8 +1,6 @@
-package com.castille.pkg.model.specification;
+package com.pepeta.score.model.specification;
 
-import com.castille.customer.model.Customer;
-import com.castille.customer.model.enumeration.Gender;
-import com.castille.pkg.model.ProductPackage;
+import com.pepeta.score.model.Score;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Predicate;
@@ -13,24 +11,22 @@ import java.util.ArrayList;
  *
  * @author Kelsas
  */
-public class ProductPackageSpecification {
+public class ScoreSpecification {
 
-    public ProductPackageSpecification() {
+    public ScoreSpecification() {
         super();
     }
 
-    public static Specification<ProductPackage> createSpecification(String productName, String description) {
+    public static Specification<Score> createSpecification(Long playerId, Long score) {
         return (root, query, cb) -> {
             final ArrayList<Predicate> predicates = new ArrayList<>();
 
-            if(productName!=null) {
-                String exp = "%" + productName + "%";
-                predicates.add(cb.like(root.get("product").get("description"), exp));
+            if(playerId != null) {
+                predicates.add(cb.equal(root.get("player").get("id"), playerId));
             }
 
-            if (description != null) {
-                String exp = "%" + description + "%";
-                predicates.add(cb.like(root.get("description"), exp));
+            if (score != null) {
+                predicates.add(cb.equal(root.get("score"), score));
             }
 
             return cb.and(predicates.toArray(new Predicate[predicates.size()]));
