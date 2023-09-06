@@ -68,15 +68,18 @@ Some of the API links are described below:
 Download or clone the project from the link below:
 
 Task
-https://github.com/ikatanyi/Order-API.git
+https://github.com/ikatanyi/ms-leaderboard-api.git
 
 mvn clean build
 
 ## Run
     mvn spring-boot:run
+
+*Docker run
+    docker-compose up from the project root
 *Run packaged jar*
 ```
-https://github.com/ikatanyi/config-repo.git
+
 ## Licence
 
     pepeta
