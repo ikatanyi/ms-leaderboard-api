@@ -16,7 +16,7 @@ COPY . /usr/src/app
 # Compile and package the application to an executable JAR
 RUN mvn package -Dmaven.test.skip
 
-# Java 17
+# Java 11
 FROM openjdk:11-jdk
 
 ARG JAR_FILE=ms-leaderboard-api-1.0.jar
@@ -24,7 +24,7 @@ ARG JAR_FILE=ms-leaderboard-api-1.0.jar
 WORKDIR /opt/app
 
 
-COPY --from=maven /usr/src/app/target/${JAR_FILE} /opt/app/
+COPY ./target/${JAR_FILE} /opt/app/
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","ms-leaderboard-api-1.0.jar"]
 
