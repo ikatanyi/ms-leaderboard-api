@@ -8,6 +8,8 @@ import com.pepeta.player.repository.PlayerRepository;
 import com.pepeta.exception.APIException;
 import com.pepeta.score.model.Score;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@EnableCaching
 @RequiredArgsConstructor
 public class PlayerService {
     private final PlayerRepository playerRepository;
@@ -58,6 +61,7 @@ public class PlayerService {
         return playerRepository.save(player);
     }
 
+    @Cacheable("playerCache")
     public Page<Player> fetchPlayers(Gender gender, String email, String name, String phoneNumber, Pageable pageable) {
         Specification<Player> spec = PlayerSpecification.createSpecification(gender, email, name, phoneNumber);
         Page<Player> items = playerRepository.findAll(spec, pageable);

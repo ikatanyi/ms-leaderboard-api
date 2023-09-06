@@ -12,6 +12,7 @@ import com.pepeta.score.repository.ScoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
+@EnableCaching
 @RequiredArgsConstructor
 //@CacheConfig(cacheNames = {"Score"})
 public class ScoreService {
@@ -60,12 +62,14 @@ public class ScoreService {
         return true;
     }
 
+    @Cacheable("scoreCache")
     public Page<Score> fetchScores(Long playerId, Long score, Pageable pageable) {
         Specification<Score> spec = ScoreSpecification.createSpecification(playerId, score);
         Page<Score> scores = scoreRepository.findAll(spec, pageable);
         return scores;
     }
 
+    @Cacheable("scoreCache")
     public Page<Score> fetchTopPlayers(int players) {
         Page<Score> products = scoreRepository.findAll(PageRequest.of(0, players, Sort.by(Sort.Direction.DESC, "score")));
         return products;
@@ -78,13 +82,14 @@ public class ScoreService {
         return scoreRepository.save(score);
     }
 
+    @Cacheable("scoreCache")
     public Score fetchScore(Long id) {
         return this.scoreRepository.findById(id)
                 .orElseThrow(() -> APIException.notFound("Score identified by id {0} not found.", id));
     }
 
+    @Cacheable("scoreCache")
     @Transactional(readOnly = true)
-    @Cacheable
     public List<Score> findAll() {
         return scoreRepository.findAll();
     }
